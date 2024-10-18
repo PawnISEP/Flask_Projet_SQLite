@@ -192,10 +192,10 @@ def emprunter_livre(livre_id):
         cursor.execute('UPDATE livres SET quantite = quantite - 1 WHERE id = ?', (livre_id,))
         conn.commit()
         conn.close()
-        return jsonify({'message': 'Livre emprunté avec succès'})
+        return f'<h1>Livre emprunté avec succès'})
     else:
         conn.close()
-        return jsonify({'message': 'Livre non disponible'}), 400
+        return f'<h1>Livre non disponible'}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)
