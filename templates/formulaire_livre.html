@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un livre</title>
+</head>
+<body>
+    <h1>Ajouter un livre</h1>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    <form action="{{ url_for('enregistrer_livre') }}" method="POST">
+        <label for="titre">Titre du livre :</label><br>
+        <input type="text" id="titre" name="titre" required><br><br>
+
+        <label for="auteur">Auteur :</label><br>
+        <input type="text" id="auteur" name="auteur" required><br><br>
+
+        <label for="quantite">Quantité :</label><br>
+        <input type="number" id="quantite" name="quantite" required><br><br>
+
+        <input type="submit" value="Ajouter le livre">
+    </form>
+</body>
+</html>
