@@ -115,7 +115,7 @@ def enregistrer_livre():
     return jsonify({'message': 'Livre ajouté avec succès'})
 
 # Ajouter un contrôle d'authentification pour l'administrateur (suppression de livres)
-@app.route('/supprimer_livre/<int:livre_id>', methods=['POST'])
+@app.route('/supprimer_livre/<int:livre_id>', methods=['DELETE'])
 def supprimer_livre(livre_id):
     if not admin_authentifie():
         return f'<h1>Accès refusé, vous devez être administrateur pour supprimer un livre.<p><a href="{url_for("authentification")}">Authentification</a></p>', 403
@@ -126,7 +126,7 @@ def supprimer_livre(livre_id):
     conn.commit()
     conn.close()
     
-    return jsonify({'message': 'Livre supprimé avec succès'})
+    return f'<h1>Le livre a été supprimé avec succès.'
 
 # Ajouter un contrôle d'authentification pour l'administrateur (gestion des utilisateurs)
 @app.route('/gestion_utilisateurs', methods=['GET'])
