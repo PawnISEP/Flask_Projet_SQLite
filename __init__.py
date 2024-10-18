@@ -8,10 +8,11 @@ import sqlite3
 app = Flask(__name__)                                                                                                                  
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 
-# Fonction pour créer une clé "authentifie" dans la session utilisateur
-def est_authentifie():
+# Fonction pour vérifier si l'administrateur est authentifié
+def admin_authentifie():
     return session.get('authentifie')
 
+# Fonction pour vérifier si un utilisateur est authentifié
 def user_authentifie():
     return session.get('authentification_utilisateur')
 
@@ -21,34 +22,25 @@ def hello_world():
 
 @app.route('/lecture')
 def lecture():
-    if est_authentifie():
-        return "<h1>Bonjour,vous êtes connecté en tant qu'administrateur</h1>"
+    if admin_authentifie():
+        return "<h1>Bonjour, vous êtes connecté en tant qu'administrateur</h1>"
     if user_authentifie():
         return "<h1>Bonjour, vous êtes connecté à votre espace utilisateur</h1>"
     else:
-        # Rediriger vers la page d'authentification si l'utilisateur n'est pas authentifié
         return redirect(url_for('authentification'))
-
-  # Si l'utilisateur est authentifié
-    return "<h2>Bravo, vous êtes authentifié</h2>"
 
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
     if request.method == 'POST':
-        # Vérifier les identifiants
-        if request.form['username'] == 'admin' and request.form['password'] == 'password': # password à cacher par la suite
+        if request.form['username'] == 'admin' and request.form['password'] == 'password': # password à cacher
             session['authentifie'] = True
             session['authentification_utilisateur'] = False
-            # Rediriger vers la route lecture après une authentification réussie
             return redirect(url_for('lecture'))
-            
-        elif request.form['username'] == 'user' and request.form['password'] == '12345': # password à cacher par la suite
+        elif request.form['username'] == 'user' and request.form['password'] == '12345': # password à cacher
             session['authentification_utilisateur'] = True
             session['authentifie'] = False
-            # Rediriger vers la route lecture après une authentification réussie
             return redirect(url_for('lecture'))
         else:
-            # Afficher un message d'erreur si les identifiants sont incorrects
             return render_template('formulaire_authentification.html', error=True)
 
     return render_template('formulaire_authentification.html', error=False)
@@ -60,7 +52,6 @@ def Readfiche(post_id):
     cursor.execute('SELECT * FROM clients WHERE id = ?', (post_id,))
     data = cursor.fetchall()
     conn.close()
-    # Rendre le template HTML et transmettre les données
     return render_template('read_data.html', data=data)
 
 @app.route('/consultation/')
@@ -74,41 +65,131 @@ def ReadBDD():
 
 @app.route('/fiche_nom/<string:nom>', methods=['GET', 'POST'])
 def FicheNom(nom):
-
     if user_authentifie():
-        
-        # Authentification réussie, maintenant on récupère les données
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM clients WHERE nom = ?', (nom,))
         data = cursor.fetchall()
         conn.close()
         return render_template('read_data.html', data=data)
-
     else:
         return f'<h1>Bonjour, vous n\'êtes pas connecté à votre espace utilisateur</h1><p><a href="{url_for("authentification")}">Authentification</a></p>'
 
-        
-        
-
 @app.route('/enregistrer_client', methods=['GET'])
 def formulaire_client():
-    return render_template('formulaire.html')  # afficher le formulaire
+    return render_template('formulaire.html')
 
 @app.route('/enregistrer_client', methods=['POST'])
 def enregistrer_client():
     nom = request.form['nom']
     prenom = request.form['prenom']
-
-    # Connexion à la base de données
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-
-    # Exécution de la requête SQL pour insérer un nouveau client
     cursor.execute('INSERT INTO clients (created, nom, prenom, adresse) VALUES (?, ?, ?, ?)', (1002938, nom, prenom, "ICI"))
     conn.commit()
     conn.close()
-    return redirect('/consultation/')  # Rediriger vers la page d'accueil après l'enregistrement
-                                                                                                                                       
+    return redirect('/consultation/')
+
+# Ajouter un contrôle d'authentification pour l'administrateur (enregistrement de livres)
+@app.route('/enregistrer_livre', methods=['POST'])
+def enregistrer_livre():
+    if not admin_authentifie():
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour enregistrer un livre'}), 403
+    
+    titre = request.form['titre']
+    auteur = request.form['auteur']
+    quantite = request.form['quantite']
+    
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO livres (titre, auteur, quantite) VALUES (?, ?, ?)', (titre, auteur, quantite))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Livre ajouté avec succès'})
+
+# Ajouter un contrôle d'authentification pour l'administrateur (suppression de livres)
+@app.route('/supprimer_livre/<int:livre_id>', methods=['DELETE'])
+def supprimer_livre(livre_id):
+    if not admin_authentifie():
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour supprimer un livre'}), 403
+    
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM livres WHERE id = ?', (livre_id,))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Livre supprimé avec succès'})
+
+# Ajouter un contrôle d'authentification pour l'administrateur (gestion des utilisateurs)
+@app.route('/gestion_utilisateurs', methods=['GET'])
+def gestion_utilisateurs():
+    if not admin_authentifie():
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour gérer les utilisateurs'}), 403
+    
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients')
+    utilisateurs = cursor.fetchall()
+    conn.close()
+    
+    return render_template('gestion_utilisateurs.html', utilisateurs=utilisateurs)
+
+# Ajouter un contrôle d'authentification pour l'administrateur (gestion des stocks)
+@app.route('/gestion_stocks', methods=['GET'])
+def gestion_stocks():
+    if not admin_authentifie():
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour gérer les stocks'}), 403
+    
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM livres')
+    stocks = cursor.fetchall()
+    conn.close()
+    
+    return render_template('gestion_stocks.html', stocks=stocks)
+
+# Ajouter un contrôle d'authentification pour les utilisateurs (recherche de livres disponibles)
+@app.route('/recherche_livres', methods=['GET'])
+def recherche_livres():
+    if not user_authentifie():
+        return jsonify({'message': 'Accès refusé, vous devez être connecté en tant qu\'utilisateur pour rechercher des livres'}), 403
+    
+    titre = request.args.get('titre')
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    
+    if titre:
+        cursor.execute('SELECT * FROM livres WHERE titre LIKE ?', ('%' + titre + '%',))
+    else:
+        cursor.execute('SELECT * FROM livres WHERE quantite > 0')
+    
+    data = cursor.fetchall()
+    conn.close()
+    
+    return render_template('read_data.html', data=data)
+
+# Ajouter un contrôle d'authentification pour les utilisateurs (emprunter un livre)
+@app.route('/emprunter_livre/<int:livre_id>', methods=['POST'])
+def emprunter_livre(livre_id):
+    if not user_authentifie():
+        return jsonify({'message': 'Accès refusé, vous devez être connecté en tant qu\'utilisateur pour emprunter un livre'}), 403
+    
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT quantite FROM livres WHERE id = ?', (livre_id,))
+    livre = cursor.fetchone()
+    
+    if livre and livre[0] > 0:
+        cursor.execute('UPDATE livres SET quantite = quantite - 1 WHERE id = ?', (livre_id,))
+        conn.commit()
+        conn.close()
+        return jsonify({'message': 'Livre emprunté avec succès'})
+    else:
+        conn.close()
+        return jsonify({'message': 'Livre non disponible'}), 400
+
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)
