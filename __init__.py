@@ -94,7 +94,7 @@ def enregistrer_client():
 @app.route('/enregistrer_livre', methods=['POST'])
 def enregistrer_livre():
     if not admin_authentifie():
-        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour enregistrer un livre'}), 403
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour enregistrer un livre<p><a href="{url_for("authentification")}">Authentification</a></p>'}), 403
     
     titre = request.form['titre']
     auteur = request.form['auteur']
@@ -112,7 +112,7 @@ def enregistrer_livre():
 @app.route('/supprimer_livre/<int:livre_id>', methods=['DELETE'])
 def supprimer_livre(livre_id):
     if not admin_authentifie():
-        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour supprimer un livre'}), 403
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour supprimer un livre<p><a href="{url_for("authentification")}">Authentification</a></p>'}), 403
     
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -126,7 +126,7 @@ def supprimer_livre(livre_id):
 @app.route('/gestion_utilisateurs', methods=['GET'])
 def gestion_utilisateurs():
     if not admin_authentifie():
-        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour gérer les utilisateurs'}), 403
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour gérer les utilisateurs<p><a href="{url_for("authentification")}">Authentification</a></p>'}), 403
     
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -140,7 +140,7 @@ def gestion_utilisateurs():
 @app.route('/gestion_stocks', methods=['GET'])
 def gestion_stocks():
     if not admin_authentifie():
-        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour gérer les stocks'}), 403
+        return jsonify({'message': 'Accès refusé, vous devez être administrateur pour gérer les stocks<p><a href="{url_for("authentification")}">Authentification</a></p>'}), 403
     
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -154,7 +154,7 @@ def gestion_stocks():
 @app.route('/recherche_livres', methods=['GET'])
 def recherche_livres():
     if not user_authentifie():
-        return jsonify({'message': 'Accès refusé, vous devez être connecté en tant qu\'utilisateur pour rechercher des livres'}), 403
+        return jsonify({'message': 'Accès refusé, vous devez être connecté en tant qu\'utilisateur pour rechercher des livres<p><a href="{url_for("authentification")}">Authentification</a></p>'}), 403
     
     titre = request.args.get('titre')
     conn = sqlite3.connect('database.db')
@@ -174,7 +174,7 @@ def recherche_livres():
 @app.route('/emprunter_livre/<int:livre_id>', methods=['POST'])
 def emprunter_livre(livre_id):
     if not user_authentifie():
-        return jsonify({'message': 'Accès refusé, vous devez être connecté en tant qu\'utilisateur pour emprunter un livre'}), 403
+        return jsonify({'message': 'Accès refusé, vous devez être connecté en tant qu\'utilisateur pour emprunter un livre<p><a href="{url_for("authentification")}">Authentification</a></p>'}), 403
     
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
