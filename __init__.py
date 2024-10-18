@@ -12,13 +12,20 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 def est_authentifie():
     return session.get('authentifie')
 
+def user_authentifie():
+    return session.get('authentification_utilisateur')
+
 @app.route('/')
 def hello_world():
     return render_template('hello.html')
 
 @app.route('/lecture')
 def lecture():
-    if not est_authentifie():
+    if est_authentifie():
+        return "<h1>Bonjour,vous êtes connecté en tant qu'administrateur</h1>"
+    if user_authentifie():
+        return "<h1>Bonjour, vous êtes connecté à votre espace utilisateur</h1>"
+    else:
         # Rediriger vers la page d'authentification si l'utilisateur n'est pas authentifié
         return redirect(url_for('authentification'))
 
@@ -31,6 +38,13 @@ def authentification():
         # Vérifier les identifiants
         if request.form['username'] == 'admin' and request.form['password'] == 'password': # password à cacher par la suite
             session['authentifie'] = True
+            session['authentification_utilisateur'] = False
+            # Rediriger vers la route lecture après une authentification réussie
+            return redirect(url_for('lecture'))
+            
+        elif request.form['username'] == 'user' and request.form['password'] == '12345': # password à cacher par la suite
+            session['authentification_utilisateur'] = True
+            session['authentifie'] = False
             # Rediriger vers la route lecture après une authentification réussie
             return redirect(url_for('lecture'))
         else:
@@ -57,6 +71,25 @@ def ReadBDD():
     data = cursor.fetchall()
     conn.close()
     return render_template('read_data.html', data=data)
+
+@app.route('/fiche_nom/<string:nom>', methods=['GET', 'POST'])
+def FicheNom(nom):
+
+    if user_authentifie():
+        
+        # Authentification réussie, maintenant on récupère les données
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM clients WHERE nom = ?', (nom,))
+        data = cursor.fetchall()
+        conn.close()
+        return render_template('read_data.html', data=data)
+
+    else:
+        return f'<h1>Bonjour, vous n\'êtes pas connecté à votre espace utilisateur</h1><p><a href="{url_for("authentification")}">Authentification</a></p>'
+
+        
+        
 
 @app.route('/enregistrer_client', methods=['GET'])
 def formulaire_client():
