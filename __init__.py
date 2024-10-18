@@ -94,6 +94,10 @@ def enregistrer_client():
     return redirect('/consultation/')
 
 # Ajouter un contrôle d'authentification pour l'administrateur (enregistrement de livres)
+@app.route('/enregistrer_livre', methods=['GET'])
+def enregistrer_livre():
+    return render_template('formulaire_livre.html')
+
 @app.route('/enregistrer_livre', methods=['POST'])
 def enregistrer_livre():
     if not admin_authentifie():
