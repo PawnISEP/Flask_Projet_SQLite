@@ -112,7 +112,7 @@ def enregistrer_livre():
     conn.commit()
     conn.close()
     
-    return jsonify({'message': 'Livre ajouté avec succès'})
+    return f'<h1>Livre ajouté avec succès !</h1>'
 
 # Ajouter un contrôle d'authentification pour l'administrateur (suppression de livres)
 @app.route('/supprimer_livre/<int:livre_id>')
