@@ -69,26 +69,14 @@ def ajouter_client():
 
     return jsonify({'message': 'Client ajouté avec succès', 'client_id': client_id}), 201
 
-# API consultation : Lire tous les clients
-@app.route('/clients', methods=['GET'])
-def lire_clients():
+@app.route('/consultation/')
+def ReadBDD():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT id, created, nom, prenom, adresse FROM clients')
+    cursor.execute('SELECT * FROM clients;')
     data = cursor.fetchall()
     conn.close()
-
-    clients = [
-        {
-            'id': row[0],
-            'created': row[1],
-            'nom': row[2],
-            'prenom': row[3],
-            'adresse': row[4]
-        }
-        for row in data
-    ]
-    return jsonify(clients), 200
+    return render_template('read_data.html', data=data)
 
 # Route pour supprimer un client
 @app.route('/supprimer_client/<int:client_id>', methods=['DELETE'])
