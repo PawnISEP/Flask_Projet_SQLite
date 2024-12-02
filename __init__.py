@@ -1,7 +1,7 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 import sqlite3
 
-app = Flask(__name__)                                                                                                                  
+app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 
 # Définir une clé API pour l'administrateur
@@ -43,6 +43,7 @@ def lecture():
     else:
         return redirect(url_for('authentification'))
 
+# Route pour ajouter un client
 @app.route('/ajouter_client', methods=['POST'])
 def ajouter_client():
     if not admin_authentifie():  # Vérifie si l'utilisateur est admin via clé API ou session
@@ -68,6 +69,7 @@ def ajouter_client():
 
     return jsonify({'message': 'Client ajouté avec succès', 'client_id': client_id}), 201
 
+# API consultation : Lire tous les clients
 @app.route('/clients', methods=['GET'])
 def lire_clients():
     conn = sqlite3.connect('database.db')
@@ -88,6 +90,7 @@ def lire_clients():
     ]
     return jsonify(clients), 200
 
+# Route pour supprimer un client
 @app.route('/supprimer_client/<int:client_id>', methods=['DELETE'])
 def supprimer_client(client_id):
     if not admin_authentifie():  # Vérifie si l'utilisateur est admin via clé API ou session
@@ -107,3 +110,27 @@ def supprimer_client(client_id):
     conn.close()
 
     return jsonify({'message': f'Client avec l\'ID {client_id} supprimé avec succès'}), 200
+
+# API consultation détaillée : Récupérer un client par ID
+@app.route('/fiche_client/<int:post_id>', methods=['GET'])
+def fiche_client(post_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE id = ?', (post_id,))
+    data = cursor.fetchone()
+    conn.close()
+
+    if data:
+        client = {
+            'id': data[0],
+            'created': data[1],
+            'nom': data[2],
+            'prenom': data[3],
+            'adresse': data[4]
+        }
+        return jsonify(client), 200
+    else:
+        return jsonify({'error': f'Client avec l\'ID {post_id} non trouvé'}), 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
