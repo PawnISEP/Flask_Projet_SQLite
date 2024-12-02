@@ -114,3 +114,70 @@ def supprimer_client(client_id):
 
     return f"<h1>Client avec l'ID {client_id} supprimé avec succès</h1><p><a href='{url_for('ReadBDD')}'>Retour à la liste des clients</a></p>"
 
+# Nouvelle route pour ajouter un client
+@app.route('/ajouter_client', methods=['POST'])
+def ajouter_client():
+    if admin_authentifie():  # Vérifie si l'utilisateur est un administrateur
+        data = request.json  # Récupère les données JSON
+        nom = data.get('nom')
+        prenom = data.get('prenom')
+        adresse = data.get('adresse')
+
+        if not nom or not prenom or not adresse:
+            return jsonify({'error': 'Les champs nom, prenom et adresse sont obligatoires'}), 400
+
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute(
+            'INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)',
+            (nom, prenom, adresse)
+        )
+        conn.commit()
+        client_id = cursor.lastrowid
+        conn.close()
+
+        return jsonify({'message': 'Client ajouté avec succès', 'client_id': client_id}), 201
+    else:
+        return jsonify({'error': 'Non autorisé'}), 403
+
+# Nouvelle route pour récupérer tous les clients
+@app.route('/clients', methods=['GET'])
+def lire_clients():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, created, nom, prenom, adresse FROM clients')
+    data = cursor.fetchall()
+    conn.close()
+
+    clients = [
+        {
+            'id': row[0],
+            'created': row[1],
+            'nom': row[2],
+            'prenom': row[3],
+            'adresse': row[4]
+        }
+        for row in data
+    ]
+    return jsonify(clients), 200
+
+# Nouvelle route pour supprimer un client
+@app.route('/supprimer_client/<int:client_id>', methods=['DELETE'])
+def supprimer_client_api(client_id):
+    if not admin_authentifie():
+        return jsonify({'error': 'Non autorisé'}), 403
+
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE id = ?', (client_id,))
+    client_data = cursor.fetchone()
+
+    if not client_data:
+        conn.close()
+        return jsonify({'error': f'Client avec l\'ID {client_id} non trouvé'}), 404
+
+    cursor.execute('DELETE FROM clients WHERE id = ?', (client_id,))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'message': f'Client avec l\'ID {client_id} supprimé avec succès'}), 200
