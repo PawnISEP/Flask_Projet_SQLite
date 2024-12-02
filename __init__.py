@@ -81,3 +81,36 @@ def FicheNom(nom):
 @app.route('/enregistrer_client', methods=['GET'])
 def formulaire_client():
     return render_template('formulaire.html')
+
+@app.route('/consulter_client/<int:client_id>', methods=['GET'])
+def consulter_client(client_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE id = ?', (client_id,))
+    client_data = cursor.fetchone()
+    conn.close()
+    if client_data:
+        return render_template('consulter_client.html', client=client_data)
+    else:
+        return f"<h1>Client avec l'ID {client_id} non trouvé</h1>", 404
+
+@app.route('/supprimer_client/<int:client_id>', methods=['POST'])
+def supprimer_client(client_id):
+    if not admin_authentifie():
+        return f"<h1>Accès interdit. Vous devez être administrateur pour effectuer cette action.</h1>", 403
+
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE id = ?', (client_id,))
+    client_data = cursor.fetchone()
+
+    if not client_data:
+        conn.close()
+        return f"<h1>Client avec l'ID {client_id} non trouvé</h1>", 404
+
+    cursor.execute('DELETE FROM clients WHERE id = ?', (client_id,))
+    conn.commit()
+    conn.close()
+
+    return f"<h1>Client avec l'ID {client_id} supprimé avec succès</h1><p><a href='{url_for('ReadBDD')}'>Retour à la liste des clients</a></p>"
+
