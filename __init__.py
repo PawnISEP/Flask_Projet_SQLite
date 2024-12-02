@@ -43,10 +43,9 @@ def lecture():
     else:
         return redirect(url_for('authentification'))
 
-# Route pour ajouter un client
 @app.route('/ajouter_client', methods=['POST'])
 def ajouter_client():
-    if not admin_authentifie():  # Vérifie si l'utilisateur est admin via clé API ou session
+    if not admin_authentifie():
         return jsonify({'error': 'Non autorisé'}), 403
 
     data = request.json
@@ -59,15 +58,28 @@ def ajouter_client():
 
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute(
-        'INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)',
-        (nom, prenom, adresse)
-    )
+
+    # Trouver le premier ID manquant
+    cursor.execute('SELECT id + 1 FROM clients c WHERE NOT EXISTS (SELECT 1 FROM clients WHERE id = c.id + 1) LIMIT 1')
+    missing_id = cursor.fetchone()
+
+    if missing_id and missing_id[0]:
+        new_id = missing_id[0]
+        cursor.execute(
+            'INSERT INTO clients (id, nom, prenom, adresse) VALUES (?, ?, ?, ?)',
+            (new_id, nom, prenom, adresse)
+        )
+    else:
+        cursor.execute(
+            'INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)',
+            (nom, prenom, adresse)
+        )
+
     conn.commit()
-    client_id = cursor.lastrowid
     conn.close()
 
-    return jsonify({'message': 'Client ajouté avec succès', 'client_id': client_id}), 201
+    return jsonify({'message': 'Client ajouté avec succès'}), 201
+
 
 @app.route('/consultation/')
 def ReadBDD():
