@@ -18,6 +18,7 @@ def user_authentifie():
 @app.route('/')
 def hello_world():
     return render_template('hello.html')
+ 
 
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
