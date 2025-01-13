@@ -1,5 +1,3 @@
-# Contenu du fichier formaté selon la structure demandée
-project_readme = """
 # Liberia - Système de Gestion de Bibliothèque
 
 ## Description
@@ -49,7 +47,9 @@ project_readme = """
 
 ### Accès utilisateur authentifié
 - **/emprunter** : Voir les ressources disponibles à emprunter.
+- **/emprunter/<post_id>/<id>** : Emprunt d'une ressource par un utilisateur.
 - **/restituer** : Gestion des emprunts en cours.
+- **/restituer/<post_id>/<id>** : Restitution d'une ressource par un utilisateur.
 - **/utilisateur/<post_id>** : Espace personnel.
 - **/utilisateur/<post_id>/supprimer** : Suppression de compte.
 
@@ -112,10 +112,3 @@ project_readme = """
 - **Base de données** : SQLite
 - **Hébergement** : Local ou serveur web
 """
-
-# Enregistrer dans un fichier README.md
-project_file_path = "/mnt/data/README_Liberia.md"
-with open(project_file_path, "w") as project_file:
-    project_file.write(project_readme)
-
-project_file_path
