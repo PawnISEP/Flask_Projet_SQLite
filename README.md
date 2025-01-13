@@ -111,4 +111,3 @@
 - **Frontend** : HTML, CSS (Poppins)
 - **Base de données** : SQLite
 - **Hébergement** : Local ou serveur web
-"""
