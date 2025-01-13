@@ -1,0 +1,546 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #001f3f;
+    color: #001f3f;
+}
+
+/* Bannière */
+.banniere {
+    background-color: #001f3f;
+    color: white;
+    display: flex;
+    align-items: center;
+    position: relative; /* Nécessaire pour les positions absolues */
+    padding: 0 7px;
+    height: 80px;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Logo et titre */
+.logo-titre {
+    display: flex;
+    align-items: center;
+    padding: 0 20px; /* Espace à gauche du logo */
+    flex-shrink: 0; /* Empêche le redimensionnement */
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.titre-site {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Navigation centrale */
+.boutons-centraux {
+    position: absolute; /* Position absolue pour rester centré */
+    left: 50%; /* Centre horizontalement par rapport à la bannière */
+    transform: translateX(-50%); /* Réellement centrer la section centrale */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.boutons-centraux button {
+    background-color: #001f3f;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    margin: 0 5px; /* Espace entre les boutons */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.boutons-centraux button:hover {
+    background-color: white;
+    color: #001f3f;
+}
+
+/* Boutons à droite */
+.boutons-droite {
+    position: absolute; /* Position absolue par rapport à la bannière */
+    right: 10px; /* Fixé au bord droit */
+    top: 50%;
+    transform: translateY(-50%); /* Centré verticalement */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espace entre les boutons */
+}
+
+/* Boutons spécifiques */
+.bouton-connexion, .bouton-espace-admin, .bouton-espace-utilisateur {
+    background-color: #001f3f;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.bouton-connexion:hover, .bouton-espace-admin:hover, .bouton-espace-utilisateur:hover {
+    background-color: white;
+    color: #001f3f;
+}
+
+/* Boutons spécifiques aux rôles */
+.bouton-espace-admin {
+    background-color: red; /* Couleur spécifique admin */
+}
+
+.bouton-espace-utilisateur {
+    background-color: blue; /* Couleur spécifique utilisateur */
+}
+
+
+/* Section Hero */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background-image: url('/static/images/bibliothèque.jpg');
+    background-size: cover;
+    background-position: center;
+    border-bottom: 2px solid #ddd;
+    z-index: 0; /* Permet au formulaire d'apparaître au-dessus */
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+.hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    z-index: 2;
+}
+
+.hero-text h1 {
+    font-size: 42px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quote {
+    font-style: italic;
+    font-size: 18px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+}
+
+.author {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Présentation */
+.presentation {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    margin-top: -10px;
+    color: white;
+    text-align: justify;
+}
+
+.text-content {
+    flex: 3;
+    padding-right: 125px;
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+
+.image-content {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: 50px;
+}
+
+.round-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    padding-right: 80px;
+    padding-left: 2px;
+}
+
+/* Main Content */
+.main-content {
+    padding: 30px;
+    margin-top: -45px;
+    color: white;
+}
+
+.main-content h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.main-content p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 75px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.card {
+    border: 2px solid black;
+    border-radius: 0; /* Coins droits */
+    padding: 30px;
+    text-align: justify;
+    hyphens: auto;
+    background-color: rgb(228, 223, 194);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin-top: 10px;
+    color: #001f3f;
+}
+
+.card h2 {
+    text-align: center;
+}
+
+.card-image {
+    display: block;
+    width: 75%;
+    height: auto;
+    margin: 0 auto 15px;
+}
+
+.card-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: justify;
+}
+
+.card-button {
+    background-color: #001f3f;
+    color: white;
+    border: 2px solid black;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+    margin-top: auto;
+    border-radius: 0; /* Coins droits */
+}
+
+.card-button:hover {
+    background-color: #fdfaf4;
+    color: #001f3f;
+    transform: scale(1.05);
+}
+
+/* Footer */
+.footer {
+    background-color: white;
+    color: #001f3f;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    height: 65px;
+    border-top: 2px solid #ddd;
+}
+
+.footer-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.footer-buttons a {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    background-color: white;
+    color: #001f3f;
+    font-size: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 0; /* Coins droits */
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.footer-buttons a:hover {
+    background-color: #001f3f;
+    color: white;
+}
+
+/* Boutons Haut et Contact */
+.bottom-buttons {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.haut {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    text-decoration: none;
+    border: 2px solid #001f3f;
+    box-sizing: border-box;
+}
+
+.haut img {
+    width: 100%;
+    height: 100%;
+}
+
+.haut.contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: 40px;
+    padding: 10px 20px;
+    background-color: white;
+    color: #001f3f;
+    border: 2px solid #001f3f;
+    box-sizing: border-box;
+}
+
+.haut:hover,
+.haut.contact:hover {
+    background-color: #001f3f;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Formulaire de contact */
+.popup-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff; /* Fond blanc */
+    border: 2px solid #001f3f; /* Contour bleu nuit */
+    padding: 25px; /* Ajout d'un padding pour aérer le contenu */
+    width: 550px; /* Largeur légèrement augmentée */
+    height: auto; /* Hauteur ajustée pour tout afficher sans défilement */
+    max-width: 90%; /* S'adapte aux petits écrans */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Ombre moderne */
+    z-index: 1000; /* Toujours au-dessus */
+    border-radius: 10px; /* Coins arrondis pour un look moderne */
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+/* Titre du formulaire */
+.popup-form h2 {
+    color: #001f3f;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #001f3f; /* Ligne décorative */
+    padding-bottom: 10px;
+}
+
+/* Labels */
+.popup-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #001f3f;
+}
+
+/* Champs de texte */
+.popup-form input[type="text"],
+.popup-form input[type="email"],
+.popup-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+    font-family: 'Poppins', Arial, sans-serif;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.popup-form input[type="text"]:focus,
+.popup-form input[type="email"]:focus,
+.popup-form textarea:focus {
+    border-color: #001f3f; /* Bordure bleue nuit au focus */
+    box-shadow: 0 0 8px rgba(0, 31, 63, 0.3); /* Effet lumineux */
+}
+
+/* Zone de texte */
+.popup-form textarea {
+    resize: none; /* Empêche de redimensionner */
+    height: 100px; /* Taille confortable */
+}
+
+/* Conteneur des boutons */
+.popup-form .buttons-container {
+    display: flex;
+    justify-content: space-between; /* Aligne les boutons */
+    margin-top: 15px; /* Ajoute un peu d'espace au-dessus des boutons */
+}
+
+/* Boutons du formulaire */
+.popup-form button {
+    display: inline-block;
+    width: calc(50% - 10px); /* Deux boutons côte à côte avec espace entre eux */
+    padding: 12px;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px; /* Coins arrondis */
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+#submitContactForm {
+    background-color: #001f3f; /* Bleu nuit */
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#submitContactForm:hover {
+    background-color: white; /* Fond blanc au survol */
+    color: #001f3f; /* Texte bleu nuit au survol */
+    transform: scale(1.05); /* Mise en valeur */
+    box-shadow: 0 0 10px rgba(0, 31, 63, 0.5); /* Ombre animée */
+}
+
+#closeContactForm {
+    background-color: #e0e0e0; /* Gris clair */
+    color: #333;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#closeContactForm:hover {
+    background-color: #ff4d4d; /* Rouge au survol */
+    color: white; /* Texte blanc */
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.5); /* Ombre animée */
+}
+
+/* Responsivité */
+@media (max-width: 600px) {
+    .popup-form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .popup-form .buttons-container {
+        flex-direction: column;
+    }
+
+    .popup-form button {
+        width: 100%; /* Pleine largeur sur petits écrans */
+        margin-bottom: 10px; /* Espace entre les boutons */
+    }
+}
+
+/* Notification */
+.notificationForm {
+    display: none;
+    position: fixed;
+    bottom: 73px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    color: #001f3f;
+    padding: 10px 20px;
+    border: 2px solid #001f3f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: opacity 0.5s ease-in-out;
+    border-radius: 0;
+}
+
+.notificationForm.show {
+    display: block;
+    opacity: 1;
+}
+
+.notificationForm.hide {
+    opacity: 0;
+}
+
+.notification {
+    display: none;
+    position: fixed;
+    bottom: 73px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e6ffed; /* Vert clair pour fond */
+    color: #155724; /* Vert foncé pour texte */
+    padding: 10px 20px;
+    border: 2px solid #28a745; /* Vert pour la bordure */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+    border-radius: 5px; /* Arrondi doux */
+    font-weight: bold; /* Texte plus visible */
+}
+
+.notification.logout {
+    background-color: #ffcccc; /* Rouge clair */
+    color: #721c24; /* Rouge foncé pour le texte */
+    border: 2px solid rgb(151, 36, 47);
+}
+
+.notification.show {
+    display: block;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0); 
+}
+
+.notification.hide {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px); 
+}

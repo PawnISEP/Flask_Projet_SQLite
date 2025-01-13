@@ -1,0 +1,121 @@
+<!-- Page: Mentions légales -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentions légales - Liberia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+
+<body>
+    <div class="banniere">
+        <!-- Logo et titre -->
+        <div class="logo-titre">
+            <img onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" class="titre-site">‎ Liberia</div>
+        </div>
+    
+        <!-- Navigation centrale -->
+        <div class="boutons-centraux">
+            <button onclick="location.href='{{ url_for('accueil') }}';">Accueil</button>
+            <button onclick="location.href='{{ url_for('catalogue') }}';">Catalogue</button>
+            <button onclick="location.href='{{ url_for('emprunter') }}';">Emprunter</button>
+            <button onclick="location.href='{{ url_for('restituer') }}';">Restituer</button>
+        </div>
+    
+        <!-- Boutons à droite -->
+        <div class="boutons-droite">
+            {% if session.get('authentifie') %}
+                {% if session.get('role') == 'admin' %}
+                    <button class="bouton-espace-admin" onclick="location.href='{{ url_for('administrateur') }}';">Espace<br>Administrateur</button>
+                {% elif session.get('role') == 'utilisateur' %}
+                    <button class="bouton-espace-utilisateur" 
+                        onclick="location.href='{{ url_for('utilisateur', post_id=session.get('id_utilisateur')) }}';">
+                        Espace<br>Utilisateur
+                    </button>
+                {% endif %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('deconnexion') }}';">Déconnexion</button>
+            {% else %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('authentification') }}';">Connexion</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="contenu-principal">
+        <h1>Mentions légales</h1>
+        <p>Les informations ci-dessous sont fournies en conformité avec la législation française relative aux mentions légales et aux services numériques.</p>
+
+        <div class="section">
+            <h2>1. Éditeur du site</h2>
+            <p>Nom de l'organisation : Institut Supérieur d'Électronique de Paris (ISEP)<br>Adresse : Paris, France<br>Numéro SIRET : 123 456 789 00000</p>
+            <p>Directeur de publication : ISEP<br>Email : directeur@liberia.com<br>Téléphone : +33 1 23 45 67 89</p>
+        </div>
+
+        <div class="section">
+            <h2>2. Hébergement</h2>
+            <p>Fournisseur : AWS<br>Adresse : 67 Bd du Général Leclerc, 92110 Clichy, France<br>Email : support@hebergeurpro.com<br>Téléphone : +33 4 56 78 90 12</p>
+        </div>
+
+        <div class="section">
+            <h2>3. Propriété intellectuelle</h2>
+            <p>Tout le contenu de ce site, y compris les textes, images, vidéos et bases de données, est protégé par le droit d'auteur. Toute reproduction ou utilisation non autorisée est strictement interdite.</p>
+        </div>
+
+        <div class="section">
+            <h2>4. Responsabilité</h2>
+            <div class="encadre">
+                <p>Nous déclinons toute responsabilité pour les éventuelles erreurs ou omissions dans le contenu du site. Les utilisateurs sont responsables de l'utilisation qu'ils font des informations disponibles.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boutons en bas de page -->
+    <div class="bottom-buttons">
+        <a href="#" class="haut" id="scrollTopButton">
+            <img src="{{ url_for('static', filename='images/haut.png') }}" alt="Revenir en haut de la page">
+        </a>
+        <a href="#" class="haut contact" id="contactButton">CONTACT</a>
+    </div>
+
+    <!-- Formulaire de contact -->
+    <div id="contactForm" class="popup-form">
+        <form id="contactFormElement">
+            <h2>Contactez-nous</h2>
+            <label for="name">Votre nom :</label>
+            <input type="text" id="name" name="name" placeholder="Entrez votre nom complet">
+            
+            <label for="email">Votre email :</label>
+            <input type="email" id="email" name="email" placeholder="Entrez votre email">
+            
+            <label for="subject">Sujet :</label>
+            <input type="text" id="subject" name="subject" placeholder="Quel est l'objet de votre message ?">
+            
+            <label for="problem">Décrivez votre problème :</label>
+            <textarea id="problem" name="problem" placeholder="Écrivez votre message ici..."></textarea>
+            
+            <div class="buttons-container">
+                <button type="button" id="submitContactForm">Envoyer</button>
+                <button type="button" id="closeContactForm">Fermer</button>
+            </div>
+        </form>
+    </div>
+
+    <footer class="pied-de-page">
+        <div class="boutons-footer">
+            <a href="{{ url_for('conditions_utilisation') }}">Conditions d'utilisation</a>
+            <a href="{{ url_for('politique_confidentialite') }}">Politique de confidentialité</a>
+            <a href="{{ url_for('mentions_legales') }}">Mentions légales</a>
+            <a href="{{ url_for('rgpd') }}">Protection des données</a>
+            <a href="{{ url_for('a_propos') }}">À propos de nous</a>
+        </div>
+    </footer>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/styles.js') }}"></script>
+
+</body>
+</html>

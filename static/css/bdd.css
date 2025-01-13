@@ -1,0 +1,92 @@
+
+        /* Boutons */
+        .bouton-assign {
+            background-color: #007bff;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+            display: block;
+            margin: auto;
+            text-align: center;
+            width: 125px; 
+        }
+        
+
+        .bouton-assign:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .bouton-supprimer {
+            background-color: #f44336;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .bouton-supprimer:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        .bouton-restituer {
+            background-color: #4caf50;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .bouton-restituer:hover {
+            background-color: #388e3c;
+            transform: scale(1.05);
+        }
+
+/* Centrer le texte pour des colonnes spécifiques */
+.table-catalogue th:nth-child(6), /* Emprunts en Cours */
+.table-catalogue th:nth-child(7), /* Nombre Total d'Emprunts */
+.table-catalogue th:nth-child(8), /* Action */
+.table-catalogue td:nth-child(6),
+.table-catalogue td:nth-child(7),
+.table-catalogue td:nth-child(8) {
+    text-align: center;
+}
+
+/* Bouton "Voir" */
+.bouton-voir {
+    background-color: #001f3f; /* Bleu nuit */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.bouton-voir:hover {
+    background-color: #0056b3; /* Bleu plus clair */
+    transform: scale(1.05); /* Agrandissement léger */
+}
+
+/* Conteneur pour les actions (centrage des boutons) */
+.actions-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espacement entre les boutons */
+}

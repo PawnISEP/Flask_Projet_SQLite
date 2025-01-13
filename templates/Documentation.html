@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liberia - Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+<body>
+
+    <div class="banniere">
+        <div class="logo-titre">
+            <img onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" class="titre-site">‎ Liberia</div>
+
+        </div>
+        <nav class="boutons-centraux">
+            <button onclick="location.href='#identifiants'">Identifiants</button>
+            <button onclick="location.href='#types-de-comptes'">Types de Comptes</button>
+            <button onclick="location.href='#routes'">Routes de l'Application</button>
+            <button onclick="location.href='#database'">Base de Données</button>
+            <button onclick="location.href='#features'">Fonctionnalités</button>
+        </nav>
+    </header>
+
+    <div class="boutons-droite">
+        <button class="bouton-espace-admin" onclick="location.href='{{ url_for('accueil') }}';">Accéder au site</button>
+    </div>
+
+    </div>
+
+    <main class="contenu-principal">
+        <h1>Documentation</h1>
+        <section id="introduction" class="section">
+            <h1>Introduction</h1>
+            <p>Ce projet, conçu en janvier 2025 pour l'ISEP (Institut Supérieur d'Électronique de Paris) sous la supervision de M. STOCKER, est un système complet de gestion de bibliothèque. L'objectif est de faciliter le prêt, le retour et la gestion des ressources littéraires dans un environnement numérique moderne et sécurisé.</p>
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='images/isep.png') }}" alt="Photo de l'ISEP">
+            </div>            
+            <p>L'ISEP est une école d'ingénieurs située à Paris, reconnue pour son excellence dans les domaines de l'électronique, de l'informatique et des technologies de l'information. Ce projet illustre l'engagement des étudiants dans l'innovation et la création de solutions pratiques et évolutives.</p>
+        </section>
+
+        <section id="identifiants" class="section">
+            <h1>Identifiants pour accéder aux comptes du site</h1>
+            <div class="contact-details">
+                <h2>Compte Administrateur</h2>
+                <p><strong>Adresse mail :</strong> admin</p>
+                <p><strong>Mot de passe :</strong> password</p>
+            </div>
+            <div class="encadre">
+                <h2>Compte Utilisateur</h2>
+                <p><strong>Adresse mail :</strong> user</p>
+                <p><strong>Mot de passe :</strong> 12345</p>
+            </div>
+        </section>
+
+        <section id="types-de-comptes" class="section">
+            <h1>1. Types de Comptes</h1>
+
+            <h2>1.1. Utilisateur (Standard)</h2>
+            <ul>
+                <li><strong>Accès :</strong> Pages publiques et espace utilisateur personnel.</li>
+                <li><strong>Fonctionnalités disponibles :</strong>
+                    <ul>
+                        <li>Consulter le catalogue des ressources.</li>
+                        <li>Emprunter et restituer des ressources.</li>
+                        <li>Gérer ses informations personnelles et consulter l'historique des emprunts.</li>
+                    </ul>
+                </li>
+                <li><strong>Restrictions :</strong> Aucun accès aux fonctionnalités d'administration.</li>
+            </ul>
+
+            <h2>1.2. Administrateur</h2>
+            <ul>
+                <li><strong>Accès :</strong> Toutes les fonctionnalités, y compris les outils d'administration.</li>
+                <li><strong>Fonctionnalités disponibles :</strong>
+                    <ul>
+                        <li>Gérer les utilisateurs (ajout, modification, suppression).</li>
+                        <li>Ajouter, modifier ou supprimer des ressources dans la bibliothèque.</li>
+                        <li>Accéder aux statistiques d'utilisation et au tableau de bord administratif.</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section id="routes" class="section">
+            <h1>2. Routes de l'Application (API)</h1>
+
+            <p>Pour information : Tous les boutons cliquables présents sur le site exécutent une API.</p>
+
+            <h2>2.1. Routes Publics</h2>
+            <ul>
+                <li><strong>Accueil (`/`) :</strong> Page principale pour découvrir les services et fonctionnalités.</li>
+                <li><strong>Catalogue (`/catalogue`) :</strong> Consultation des ressources disponibles avec recherche.</li>
+                <li><strong>Inscription (`/inscription`) :</strong> Création d’un compte utilisateur.</li>
+                <li><strong>Connexion (`/authentification`) :</strong> Accès au compte utilisateur ou administrateur.</li>
+                <li><strong>Conditions d'utilisation (`/conditions-d'utilisations`) :</strong> Détails sur les règles d'utilisation.</li>
+                <li><strong>Politique de confidentialité (`/politique-de-confidentialité`) :</strong> Explication de la gestion des données personnelles.</li>
+                <li><strong>Mentions légales (`/mentions-légales`) :</strong> Informations juridiques relatives au site.</li>
+                <li><strong>Protection des données RGPD (`/rgpd`) :</strong> Conformité au RGPD.</li>
+                <li><strong>À propos (`/à-propos`) :</strong> Informations sur le projet et ses créateurs.</li>
+            </ul>
+
+            <h2>2.2. Routes Utilisateur</h2>
+            <ul>
+                <li><strong>Emprunter (`/emprunter`) :</strong> Affichage des ressources disponibles à emprunter.</li>
+                <li><strong>Restituer (`/restituer`) :</strong> Consultation et gestion des emprunts en cours.</li>
+                <li><strong>Utilisateur (`/utilisateur/<post_id>`) :</strong> Espace personnel pour gérer ses informations et emprunts.</li>
+                <li><strong>Suppression de compte (`/utilisateur/<post_id>supprimer`) :</strong> Suppression de son propre compte.</li>
+            </ul>
+
+            <h2>2.3. Routes Administrateur</h2>
+            <ul>
+                <li><strong>Espace administratif (`/administrateur`) :</strong> Tableau de bord pour gérer les utilisateurs et ressources.</li>
+                <li><strong>Stocks (`/stocks`) :</strong> Gestion et visualisation des ressources en stock.</li>
+                <li><strong>Ajout de ressources (`/stocks/ajouter`) :</strong> Ajouter de nouvelles ressources à la bibliothèque.</li>
+                <li><strong>Suppression de ressources (`/stocks/supprimer/<id>`) :</strong> Supprimer des ressources ou exemplaires.</li>
+            </ul>
+        </section>
+
+        <section id="database" class="section">
+            <h1>3. Structure de la Base de Données</h1>
+            <p>La base de données est gérée via SQLite et contient quatre tables principales :</p>
+
+            <h2>Table : utilisateurs</h2>
+            <table class="table-catalogue">
+                <thead>
+                    <tr>
+                        <th>Champ</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>INTEGER</td><td>Identifiant unique de l'utilisateur.</td></tr>
+                    <tr><td>nom</td><td>TEXT</td><td>Nom de l'utilisateur.</td></tr>
+                    <tr><td>prenom</td><td>TEXT</td><td>Prénom de l'utilisateur.</td></tr>
+                    <tr><td>email</td><td>TEXT</td><td>Adresse email unique.</td></tr>
+                    <tr><td>password</td><td>TEXT</td><td>Mot de passe de l'utilisateur.</td></tr>
+                    <tr><td>nombre_emprunts_en_cours</td><td>INTEGER</td><td>Nombre de ressources actuellement empruntées.</td></tr>
+                    <tr><td>total_emprunts</td><td>INTEGER</td><td>Total des emprunts réalisés.</td></tr>
+                    <tr><td>role</td><td>TEXT</td><td>Rôle de l'utilisateur (utilisateur ou admin).</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Table : ressources</h2>
+            <table class="table-catalogue">
+                <thead>
+                    <tr>
+                        <th>Champ</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>INTEGER</td><td>Identifiant unique de la ressource.</td></tr>
+                    <tr><td>titre</td><td>TEXT</td><td>Titre de la ressource.</td></tr>
+                    <tr><td>auteur</td><td>TEXT</td><td>Auteur de la ressource.</td></tr>
+                    <tr><td>type_ressource</td><td>TEXT</td><td>Genre de la ressource.</td></tr>
+                    <tr><td>date_publication</td><td>DATE</td><td>Date de publication de la ressource.</td></tr>
+                    <tr><td>nombre_exemplaires_total</td><td>INTEGER</td><td>Nombre total d'exemplaires disponibles.</td></tr>
+                    <tr><td>nombre_emprunts_total</td><td>INTEGER</td><td>Nombre total d'emprunts de la ressource.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Table : exemplaires</h2>
+            <table class="table-catalogue">
+                <thead>
+                    <tr>
+                        <th>Champ</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>INTEGER</td><td>Identifiant unique de l'exemplaire.</td></tr>
+                    <tr><td>ressource_id</td><td>INTEGER</td><td>Lien vers la ressource correspondante.</td></tr>
+                    <tr><td>utilisateur_id</td><td>INTEGER</td><td>Identifiant de l'utilisateur emprunteur (ou NULL).</td></tr>
+                    <tr><td>emprunte</td><td>BOOLEAN</td><td>Indique si l'exemplaire est emprunté ou non.</td></tr>
+                    <tr><td>date_emprunt</td><td>DATE</td><td>Date d'emprunt de l'exemplaire.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Table : emprunts</h2>
+            <table class="table-catalogue">
+                <thead>
+                    <tr>
+                        <th>Champ</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>INTEGER</td><td>Identifiant unique de l'emprunt.</td></tr>
+                    <tr><td>utilisateur_id</td><td>INTEGER</td><td>Identifiant de l'utilisateur ayant emprunté.</td></tr>
+                    <tr><td>ressource_id</td><td>INTEGER</td><td>Identifiant de la ressource empruntée.</td></tr>
+                    <tr><td>date_emprunt</td><td>DATE</td><td>Date d'emprunt.</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="features" class="section">
+            <h1>4. Fonctionnalités Générales</h1>
+            <ul>
+                <li><strong>Gestion des ressources :</strong> Recherche, ajout, modification et suppression des ressources.</li>
+                <li><strong>Gestion des utilisateurs :</strong> Recherche, ajout et suppression des comptes.</li>
+                <li><strong>Catalogue :</strong> Rechercher et afficher les livres disponibles.</li>
+                <li><strong>Emprunt et restitution :</strong> Système de prêt intégré.</li>
+                <li><strong>Conformité RGPD :</strong> Pages légales pour la transparence.</li>
+            </ul>
+        </section>
+    </main>
+
+    <button class="bouton-espace-admin" onclick="location.href='{{ url_for('accueil') }}';">Accéder au site</button>
+
+    <footer class="pied-de-page">
+        <p>© 2025 ISEP - Projet réalisé par Paul avec les conseils de M. STOCKER</p>
+        <p><a href="#introduction">Retour en haut</a></p>
+    </footer>
+</body>
+</html>

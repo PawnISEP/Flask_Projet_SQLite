@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentification - Liberia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/authentification.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+<body>
+    <div class="banniere">
+        <div class="logo-titre">
+            <img onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" class="titre-site">‎ Liberia</div>
+        </div>
+        <div class="boutons-centraux">
+            <button onclick="location.href='{{ url_for('accueil') }}';">Accueil</button>
+            <button onclick="location.href='{{ url_for('catalogue') }}';">Catalogue</button>
+            <button onclick="location.href='{{ url_for('emprunter') }}';">Emprunter</button>
+            <button onclick="location.href='{{ url_for('restituer') }}';">Restituer</button>
+        </div>
+    </div>
+
+
+    <div class="contenu-principal">
+        <div class="auth-container">
+            <h2>Authentification</h2>
+            <form method="POST" action="/authentification">
+                {% if erreur %}
+                    <div class="message-erreur active">
+                        Nom d'utilisateur ou mot de passe incorrect.
+                    </div>
+                {% endif %}
+
+                <label for="email">Adresse email</label>
+                <input type="text" id="username" name="username" placeholder="Entrez votre adresse email" required>                
+                
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                
+                <button type="submit">Se connecter</button>
+            </form>
+            <button id="registerButton" onclick="location.href='{{ url_for('inscription') }}';">S'inscrire</button>
+        </div>
+    </div>
+
+
+    
+
+    <footer class="pied-de-page">
+        <div class="boutons-footer">
+            <a href="{{ url_for('conditions_utilisation') }}">Conditions d'utilisation</a>
+            <a href="{{ url_for('politique_confidentialite') }}">Politique de confidentialité</a>
+            <a href="{{ url_for('mentions_legales') }}">Mentions légales</a>
+            <a href="{{ url_for('rgpd') }}">Protection des données</a>
+            <a href="{{ url_for('a_propos') }}">À propos de nous</a>
+        </div>
+    </footer>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/styles.js') }}"></script>
+</body>
+</html>

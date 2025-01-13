@@ -1,0 +1,221 @@
+/* Styles de base */
+body {
+    margin: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Pour que le contenu occupe toute la hauteur de la page */
+}
+
+/* Bannière */
+.banniere {
+    background-color: #001f3f;
+    color: white;
+    display: flex;
+    align-items: center; /* Centre verticalement les éléments de la bannière */
+    justify-content: space-between; /* Assure l'espacement entre les blocs (logo, boutons, etc.) */
+    padding: 0 7px;
+    height: 80px;
+    border-bottom: 2px solid #ddd;
+    box-sizing: border-box;
+}
+
+.logo-titre {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.titre-site {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.boutons-centraux {
+    flex: 1; 
+    display: flex;
+    padding: 0 200px;
+    margin-left: 80px;
+}
+
+.boutons-centraux button, .bouton-connexion {
+    background-color: #001f3f;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.boutons-centraux button:hover, .bouton-connexion:hover {
+    background-color: white;
+    color: #001f3f;
+}
+
+/* Conteneur principal */
+.contenu-principal {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Encadré d'authentification */
+.auth-container {
+    background-color: #ffffff;
+    padding: 30px;
+    width: 400px;
+    max-width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.auth-container h2 {
+    color: #001f3f;
+    font-size: 22px;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #001f3f;
+    padding-bottom: 10px;
+}
+
+.auth-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #001f3f;
+}
+
+.auth-container input[type="text"],
+.auth-container input[type="email"],
+.auth-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+    font-family: 'Poppins', Arial, sans-serif;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.auth-container input[type="text"]:focus,
+.auth-container input[type="password"]:focus {
+    border-color: #001f3f;
+    box-shadow: 0 0 8px rgba(0, 31, 63, 0.3);
+}
+
+.auth-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #001f3f;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.auth-container button:hover {
+    background-color: white;
+    color: #001f3f;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 31, 63, 0.5);
+}
+
+/* Style du bouton S'inscrire */
+#registerButton {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px; /* Ajoute un espace entre les deux boutons */
+    background-color: #d2d2d2; /* Même couleur de fond */
+    color: #001f3f; /* Même couleur de texte */
+    font-size: 15px; /* Même taille de police */
+    font-weight: bold; /* Même poids de texte */
+    border: none; /* Pas de bordure */
+    border-radius: 8px; /* Même arrondi */
+    cursor: pointer; /* Pointeur survol */
+    transition: background-color 0.3s, transform 0.2s; /* Transitions douces */
+}
+
+#registerButton:hover {
+    background-color: white; /* Change à blanc au survol */
+    color: #001f3f; /* Texte devient bleu */
+    transform: scale(1.05); /* Effet d'agrandissement au survol */
+    box-shadow: 0 0 10px rgba(0, 31, 63, 0.5); /* Ombre lors du survol */
+}
+
+
+/* Pied de page */
+.pied-de-page {
+    background-color: #001f3f;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto; /* Force le pied de page à rester en bas */
+}
+
+.pied-de-page a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 14px;
+}
+
+.pied-de-page a:hover {
+    text-decoration: underline;
+}
+
+.message-erreur {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Notification */
+.notification {
+    display: none;
+    position: fixed;
+    bottom: 73px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    color: #001f3f;
+    padding: 10px 20px;
+    border: 2px solid #001f3f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: opacity 0.5s ease-in-out;
+    border-radius: 0;
+}
+
+.notification.show {
+    display: block;
+    opacity: 1;
+}
+
+.notification.hide {
+    opacity: 0;
+}

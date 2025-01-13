@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Liberia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/accueil.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+
+<body>
+    <div class="banniere">
+        <!-- Logo et titre -->
+        <div class="logo-titre">
+            <img onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" class="titre-site">‎ Liberia</div>
+        </div>
+    
+        <!-- Navigation centrale -->
+        <div class="boutons-centraux">
+            <button onclick="location.href='{{ url_for('accueil') }}';">Accueil</button>
+            <button onclick="location.href='{{ url_for('catalogue') }}';">Catalogue</button>
+            <button onclick="location.href='{{ url_for('emprunter') }}';">Emprunter</button>
+            <button onclick="location.href='{{ url_for('restituer') }}';">Restituer</button>
+        </div>
+    
+        <!-- Boutons à droite -->
+        <div class="boutons-droite">
+            {% if session.get('authentifie') %}
+                {% if session.get('role') == 'admin' %}
+                    <button class="bouton-espace-admin" onclick="location.href='{{ url_for('administrateur') }}';">Espace<br>Administrateur</button>
+                {% elif session.get('role') == 'utilisateur' %}
+                    <button class="bouton-espace-utilisateur" 
+                        onclick="location.href='{{ url_for('utilisateur', post_id=session.get('id_utilisateur')) }}';">
+                        Espace<br>Utilisateur
+                    </button>
+                {% endif %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('deconnexion') }}';">Déconnexion</button>
+            {% else %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('authentification') }}';">Connexion</button>
+            {% endif %}
+        </div>
+    </div>
+      
+    <div class="hero-section">
+        <div class="hero-text">
+            <h1>Bienvenue dans votre espace <br>littéraire numérique</h1>
+            <p class="quote">"Lire, c'est boire et manger. L'esprit qui ne lit pas maigrit comme le corps qui ne mange pas."</p>
+            <p class="author">Victor Hugo (1802 - 1885)</p>
+        </div>
+    </div>
+
+    <div class="presentation">
+        <div class="text-content">
+            <h2>Présentation</h2>
+            <p>Bienvenue dans votre bibliothèque en ligne, un espace unique où la découverte, l'apprentissage et l'exploration s'entrelacent pour enrichir votre esprit. Ici, chaque visite est une opportunité précieuse de grandir, de se cultiver et de voyager à travers des univers littéraires variés, riches en émotions et en savoirs.</p>
+            <p>Notre mission est de rendre le savoir accessible à tous, sans frontières, et à tout moment. Grâce à notre vaste collection de ressources, plongez dans un univers infini de connaissances, de culture et d'inspiration, soigneusement conçu pour éveiller votre curiosité, élargir vos horizons et répondre à vos attentes.</p>
+        </div>
+        <div class="image-content">
+            <img src="{{ url_for('static', filename='images/livre.png') }}" alt="Présentation" class="round-image">
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h2>Découvrez nos services</h2>
+        <div class="card-container">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/catalogue.png') }}" alt="Image 1" class="card-image">
+                <h2>Consulter le catalogue</h2>
+                <p class="card-text">Explorez notre vaste collection de livres, catalogues, magazines, journeaux... couvrant des sujets variés pour tous les âges et intérêts.</p>
+                <button class="card-button" onclick="location.href='{{ url_for('catalogue') }}';">Découvrir</button>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/emprunter.png') }}" alt="Image 2" class="card-image">
+                <h2>Emprunter un livre</h2>
+                <p class="card-text">Vous êtes tombés sur la perle rare ? Alors n’hésitez plus profitez longuement de nos ressources littéraires en l'emportant avec vous.</p>
+                <button class="card-button" onclick="location.href='{{ url_for('emprunter') }}';">Emprunter</button>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/retour.png') }}" alt="Image 3" class="card-image">
+                <h2>Restituer un livre</h2>
+                <p class="card-text">Espace réservé au retour des ouvrages précédemment empruntés. Pour information, les retours sont soumis à un contrôle.</p>
+                <button class="card-button" onclick="location.href='{{ url_for('restituer') }}';">Restituer</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-buttons">
+            <a href="{{ url_for('conditions_utilisation') }}">Conditions d'utilisation</a>
+            <a href="{{ url_for('politique_confidentialite') }}">Politique de confidentialité</a>
+            <a href="{{ url_for('mentions_legales') }}">Mentions légales</a>
+            <a href="{{ url_for('rgpd') }}">Protection des données</a>
+            <a href="{{ url_for('a_propos') }}">À propos de nous</a>
+        </div>
+    </div>
+
+    <!-- Boutons en bas de page -->
+    <div class="bottom-buttons">
+        <a href="#" class="haut" id="scrollTopButton">
+            <img src="{{ url_for('static', filename='images/haut.png') }}" alt="Revenir en haut de la page">
+        </a>
+        <a href="#" class="haut contact" id="contactButton">CONTACT</a>
+    </div>
+
+    <!-- Formulaire de contact -->
+    <div id="contactForm" class="popup-form">
+        <form id="contactFormElement">
+            <h2>Contactez-nous</h2>
+            <label for="name">Votre nom :</label>
+            <input type="text" id="name" name="name" placeholder="Entrez votre nom complet">
+            
+            <label for="email">Votre email :</label>
+            <input type="email" id="email" name="email" placeholder="Entrez votre email">
+            
+            <label for="subject">Sujet :</label>
+            <input type="text" id="subject" name="subject" placeholder="Quel est l'objet de votre message ?">
+            
+            <label for="problem">Décrivez votre problème :</label>
+            <textarea id="problem" name="problem" placeholder="Écrivez votre message ici..."></textarea>
+            
+            <div class="buttons-container">
+                <button type="button" id="submitContactForm">Envoyer</button>
+                <button type="button" id="closeContactForm">Fermer</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notificationForm" class="notificationForm"></div>
+    <div id="notification" class="notification"></div>
+    <div id="notificationRequest" class="notificationForm"></div>  
+
+    <script src="{{ url_for('static', filename='js/accueil.js') }}"></script>
+</body>
+</html>

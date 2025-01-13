@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Utilisateurs - Liberia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bdd.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+<body>
+    <div class="banniere">
+        <div class="logo-titre">
+            <img onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" class="titre-site">‎ Liberia</div>
+        </div>
+        <div class="boutons-centraux">
+            <button onclick="location.href='{{ url_for('accueil') }}';">Accueil</button>
+            <button onclick="location.href='{{ url_for('catalogue') }}';">Catalogue</button>
+            <button onclick="location.href='{{ url_for('emprunter') }}';">Emprunter</button>
+            <button onclick="location.href='{{ url_for('restituer') }}';">Restituer</button>
+        </div>
+        <div class="boutons-droite">
+            {% if session.get('authentifie') and session.get('role') == 'admin' %}
+                <button class="bouton-espace-admin" onclick="location.href='{{ url_for('administrateur') }}';">Espace<br>Administrateur</button>
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('deconnexion') }}';">Déconnexion</button>
+            {% else %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('authentification') }}';">Connexion</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="contenu-principal">
+        <h1>Espace Administrateur<br>Gestion des Utilisateurs</h1>
+        <p>Interface de gestion des comptes utilisateurs. Vous pouvez gérer (ajouter, supprimer, consulter) les différents membres du site Liberia.</p>
+
+        <!-- Section 1 : Statistiques Générales -->
+        <div class="section">
+            <h2>Statistiques Générales</h2>
+            <div class="info-container">
+                <div class="info-row">
+                    <span class="info-label">Nombre d’utilisateurs totaux :</span>
+                    <span class="info-value">{{ nombre_utilisateurs }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Emprunts moyens par utilisateur :</span>
+                    <span class="info-value">{{ moyenne_emprunts }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nombre total d'emprunts en cours :</span>
+                    <span class="info-value">{{ livres_empruntes }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2 : Formulaire d'enregistrement -->
+        <div class="section">
+            <h2>Enregistrer un nouvel utilisateur</h2>
+            <form action="{{ url_for('inscription') }}" method="POST" class="form-ajout">
+                <div class="info-row">
+                    <label for="nom" class="info-label">Nom :</label>
+                    <input type="text" id="nom" name="nom" class="info-value" required>
+                </div>
+                <div class="info-row">
+                    <label for="prenom" class="info-label">Prénom :</label>
+                    <input type="text" id="prenom" name="prenom" class="info-value" required>
+                </div>
+                <div class="info-row">
+                    <label for="email" class="info-label">E-mail :</label>
+                    <input type="email" id="email" name="email" class="info-value" required>
+                </div>
+                <div class="info-row">
+                    <label for="password" class="info-label">Mot de passe :</label>
+                    <input type="password" id="password" name="password" class="info-value" required>
+                </div>
+                <div class="action-container">
+                    <button type="submit" class="bouton-emprunter">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Section 3 : Liste des utilisateurs -->
+        <div class="section">
+            <h2>Liste des Utilisateurs</h2>
+
+            <a>Pour information : Les utilisateurs dont le compte est supprimé se voient automatiquement remettre leurs emprunts en cours comme de nouveau disponible dans le catalogue.</a>
+
+            <!-- Barre de recherche -->
+            <div class="recherche">
+                <label for="searchUser" class="recherche-label">Rechercher :
+                    <input type="text" id="searchUser" class="recherche-input" placeholder="Tapez un nom...">
+                </label>
+            </div>         
+
+            <table class="table-catalogue">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>E-mail</th>
+                        <th style="width: 20%;">Date de Création</th> 
+                        <th style="width: 10%; text-align: center;">Emprunts en Cours</th> 
+                        <th style="width: 10%; text-align: center;">Total des Emprunts</th>
+                        <th style="width: 15%; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for utilisateur in utilisateurs %}
+                    <tr>
+                        <td>{{ utilisateur.id }}</td>
+                        <td class="nom-utilisateur">{{ utilisateur.nom }}</td>
+                        <td>{{ utilisateur.prenom }}</td>
+                        <td style="text-align: center;">{{ utilisateur.email }}</td>
+                        <td style="text-align: center;">{{ utilisateur.created }}</td>
+                        <td style="text-align: center;">{{ utilisateur.emprunts_en_cours }}</td>
+                        <td style="text-align: center;">{{ utilisateur.total_emprunts }}</td>
+                        <td style="text-align: center;">
+                            <div class="actions-container">
+                                <button onclick="location.href='{{ url_for('utilisateur', post_id=utilisateur.id) }}';" class="bouton-voir">Fiche</button>
+                                <form action="{{ url_for('supprimer_utilisateur', id=utilisateur.id) }}" method="POST" style="display: inline;">
+                                    <button type="submit" class="bouton-supprimer">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div id="noResultsMessage" class="message-aucun-resultat" style="display: none;">
+                Aucun utilisateur ne correspond à votre recherche.
+            </div>
+        </div>
+    </div>
+
+    <!-- Boutons en bas de page -->
+    <div class="bottom-buttons">
+        <a href="#" class="haut" id="scrollTopButton">
+            <img src="{{ url_for('static', filename='images/haut.png') }}" alt="Revenir en haut de la page">
+        </a>
+    </div>
+
+    <footer class="pied-de-page">
+        <div class="boutons-footer">
+            <a href="{{ url_for('conditions_utilisation') }}">Conditions d'utilisation</a>
+            <a href="{{ url_for('politique_confidentialite') }}">Politique de confidentialité</a>
+            <a href="{{ url_for('mentions_legales') }}">Mentions légales</a>
+            <a href="{{ url_for('rgpd') }}">Protection des données</a>
+            <a href="{{ url_for('a_propos') }}">À propos</a>
+        </div>
+    </footer>
+
+    <div id="notification" class="notification"></div>
+    <div id="notificationRequest" class="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/bdd.js') }}"></script>
+</body>
+</html>

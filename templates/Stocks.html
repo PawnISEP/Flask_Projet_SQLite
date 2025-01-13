@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Stocks - Liberia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bdd.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+<body>
+    <div class="banniere">
+        <div class="logo-titre">
+            <img onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div onclick="location.href='{{ url_for('accueil') }}';" style="cursor: pointer;" class="titre-site">‎ Liberia</div>
+        </div>
+        <div class="boutons-centraux">
+            <button onclick="location.href='{{ url_for('accueil') }}';">Accueil</button>
+            <button onclick="location.href='{{ url_for('catalogue') }}';">Catalogue</button>
+            <button onclick="location.href='{{ url_for('emprunter') }}';">Emprunter</button>
+            <button onclick="location.href='{{ url_for('restituer') }}';">Restituer</button>
+        </div>
+        <div class="boutons-droite">
+            {% if session.get('authentifie') and session.get('role') == 'admin' %}
+                <button class="bouton-espace-admin" onclick="location.href='{{ url_for('administrateur') }}';">Espace<br>Administrateur</button>
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('deconnexion') }}';">Déconnexion</button>
+            {% else %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('authentification') }}';">Connexion</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="contenu-principal">
+        <h1>Espace Administrateur<br>Gestion des Stocks</h1>
+        <p>Interface de gestion des ressources littéraires. Vous pouvez gérer (ajouter, attribuer ou restituer) des ressources ici.</p>
+
+        <div class="section">
+            <h2>Statistiques Générales</h2>
+            <div class="info-container">
+                <div class="info-row">
+                    <span class="info-label">Nombre de références proposées :</span>
+                    <span class="info-value">{{ nombre_references }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Livres en stock :</span>
+                    <span class="info-value">{{ livres_en_stock }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Livres empruntés :</span>
+                    <span class="info-value">{{ livres_empruntes }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Emprunts moyens par utilisateur :</span>
+                    <span class="info-value">{{ moyenne_emprunts }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Ajouter une ressource littéraire</h2>
+            <form action="{{ url_for('ajouter_livre') }}" method="POST" class="form-ajout">
+                <!-- Champs du formulaire -->
+                <div class="info-row">
+                    <label for="titre" class="info-label">Titre :</label>
+                    <input type="text" id="titre" name="titre" class="info-value" required>
+                </div>
+                <div class="info-row">
+                    <label for="auteur" class="info-label">Auteur :</label>
+                    <input type="text" id="auteur" name="auteur" class="info-value" required>
+                </div>
+                <div class="info-row">
+                    <label for="type" class="info-label">Genre :</label>
+                    <input type="text" id="type" name="type" class="info-value" required>
+                </div>
+                <div class="info-row">
+                    <label for="date_publication" class="info-label">Date de publication :</label>
+                    <input type="date" id="date_publication" name="date_publication" class="info-value" required>
+                </div>
+                <div class="info-row">
+                    <label for="nombre_exemplaires" class="info-label">Nombre d'exemplaires :</label>
+                    <input type="number" id="nombre_exemplaires" name="nombre_exemplaires" class="info-value" required>
+                </div>
+                <div class="action-container">
+                    <button type="submit" class="bouton-emprunter">Ajouter</button>
+                </div>
+            </form>
+        </div>
+        
+        
+
+        <div class="section">
+            <h2>Liste des Ressources</h2>
+
+            <a>Il peut y avoir plusieurs exemplaires d'une même ressource littéraire, c'est pour cela que certains ouvrages peuvent apparâitre plusieurs fois.<br></a>
+            <a></a>
+            <a><br>Le bouton 'Attribuer' permet de définir un emprunt à un utilisateur.</a>
+            <a><br>Le bouton 'Supprimer' permet de supprimer un exemplaire d'un ouvrage de la bibliothèque.</a>
+            <a><br>Le bouton 'Restituer' permet de définir un emprunt comme de retour en stock.</a>
+         
+            <!-- Barre de recherche -->
+            <div class="recherche">
+                <label for="searchBar" class="recherche-label">Rechercher : 
+                <input type="text" id="searchBar" class="recherche-input" placeholder="Tapez un titre..."></label>
+            </div>            
+
+            <table class="table-catalogue">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Genre</th>
+                        <th>Stock</th>
+                        <th>Emprunté Par</th>
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="catalogueBody">
+                    {% for exemplaire in exemplaires %}
+                    <tr>
+                        <td class="titre-livre">{{ exemplaire.titre }}</td>
+                        <td>{{ exemplaire.auteur }}</td>
+                        <td>{{ exemplaire.type }}</td>
+                        <td>{{ "En stock" if not exemplaire.emprunte else "Emprunté" }}</td>
+                        <td>
+                            {% if exemplaire.emprunte and exemplaire.emprunte_par %}
+                                {{ exemplaire.emprunte_par.nom }} {{ exemplaire.emprunte_par.prenom }}
+                            {% else %}
+                                Non attribué
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center;">
+                            <div class="actions-container" style="display: flex; justify-content: center; gap: 10px;">
+                                {% if exemplaire.emprunte and exemplaire.emprunte_par %}
+                                    <form action="{{ url_for('restituer_ressource', id_utilisateur=exemplaire.emprunte_par.id, id_emprunt=exemplaire.id) }}" method="POST">
+                                        <button type="submit" class="bouton-restituer">Restituer</button>
+                                    </form>
+
+                                {% else %}
+                                <!--
+<form method="POST" id="assignForm{{ exemplaire.id }}" style="display: inline;">
+    <select name="id_utilisateur" 
+            onchange="if (this.value) { 
+                this.form.action = '{{ url_for('emprunter_exemplaire', ressource_id=exemplaire.id, id_utilisateur=0) }}'.replace('0', this.value); 
+                this.form.submit(); 
+            }" 
+            class="bouton-assign">
+        <option value="" selected disabled>Attribuer</option>
+        {% for utilisateur in utilisateurs %}
+            <option value="{{ utilisateur.id }}">{{ utilisateur.nom }} {{ utilisateur.prenom }}</option>
+        {% endfor %}
+    </select>
+</form>
+-->
+
+                                
+                                                                               
+                                <form action="{{ url_for('supprimer_exemplaire', id=exemplaire['id']) }}" method="POST">
+                                    <button type="submit" class="bouton-supprimer">Supprimer</button>
+                                </form>                                
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div id="noResultsMessage" class="message-aucun-resultat" style="display: none;">
+                Aucune ressource ne correspond à votre recherche.
+            </div>
+        </div>
+    </div>
+
+                <!-- Boutons en bas de page -->
+        <div class="bottom-buttons">
+            <a href="#" class="haut" id="scrollTopButton">
+                <img src="{{ url_for('static', filename='images/haut.png') }}" alt="Revenir en haut de la page">
+            </a>
+            <a href="#" class="haut contact" id="contactButton">CONTACT</a>
+        </div>
+    
+        <!-- Formulaire de contact -->
+        <div id="contactForm" class="popup-form">
+            <form id="contactFormElement">
+                <h2>Contactez-nous</h2>
+                <label for="name">Votre nom :</label>
+                <input type="text" id="name" name="name" placeholder="Entrez votre nom complet">
+                
+                <label for="email">Votre email :</label>
+                <input type="email" id="email" name="email" placeholder="Entrez votre email">
+                
+                <label for="subject">Sujet :</label>
+                <input type="text" id="subject" name="subject" placeholder="Quel est l'objet de votre message ?">
+                
+                <label for="problem">Décrivez votre problème :</label>
+                <textarea id="problem" name="problem" placeholder="Écrivez votre message ici..."></textarea>
+                
+                <div class="buttons-container">
+                    <button type="button" id="submitContactForm">Envoyer</button>
+                    <button type="button" id="closeContactForm">Fermer</button>
+                </div>
+            </form>
+        </div>
+
+    <footer class="pied-de-page">
+        <div class="boutons-footer">
+            <a href="{{ url_for('conditions_utilisation') }}">Conditions d'utilisation</a>
+            <a href="{{ url_for('politique_confidentialite') }}">Politique de confidentialité</a>
+            <a href="{{ url_for('mentions_legales') }}">Mentions légales</a>
+            <a href="{{ url_for('rgpd') }}">Protection des données</a>
+            <a href="{{ url_for('a_propos') }}">À propos</a>
+        </div>
+    </footer>
+
+    <div id="notification" class="notification"></div>
+    <div id="notificationRequest" class="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/styles.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Administrateur - Liberia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+<body>
+    <div class="banniere">
+        <div class="logo-titre">
+            <img onclick="location.href='{{ url_for('accueil') }}';" class="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            <div onclick="location.href='{{ url_for('accueil') }}';" class="titre-site">‎ Liberia</div>
+        </div>
+        <div class="boutons-centraux">
+            <button onclick="location.href='{{ url_for('accueil') }}';">Accueil</button>
+            <button onclick="location.href='{{ url_for('catalogue') }}';">Catalogue</button>
+            <button onclick="location.href='{{ url_for('emprunter') }}';">Emprunter</button>
+            <button onclick="location.href='{{ url_for('restituer') }}';">Restituer</button>
+        </div>
+        <!-- Boutons à droite -->
+        <div class="boutons-droite">
+            {% if session.get('authentifie') %}
+                {% if session.get('role') == 'admin' %}
+                    <button class="bouton-espace-admin" onclick="location.href='{{ url_for('administrateur') }}';">Espace<br>Administrateur</button>
+                {% elif session.get('role') == 'utilisateur' %}
+                    <button class="bouton-espace-utilisateur" 
+                        onclick="location.href='{{ url_for('utilisateur', post_id=session.get('id_utilisateur')) }}';">
+                        Espace<br>Utilisateur
+                    </button>
+                {% endif %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('deconnexion') }}';">Déconnexion</button>
+            {% else %}
+                <button class="bouton-connexion" onclick="location.href='{{ url_for('authentification') }}';">Connexion</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="contenu-principal">
+        <h1>Espace Administrateur</h1>
+        <p>Bienvenue dans votre espace administrateur. Gérez les utilisateurs et les ressources littéraires facilement.</p>
+
+
+        <!-- Section Récapitulatif -->
+        <div class="section">
+            <h2>Tableau de bord</h2>
+            <div class="info-container">
+                <div class="info-row">
+                    <span class="info-label">Nombre total de comptes :</span>
+                    <span class="info-value">{{ nombre_comptes }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nombre total de références proposées :</span>
+                    <span class="info-value">{{ nombre_references }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ressources littéraires en stock :</span>
+                    <span class="info-value">{{ livres_en_stock }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ressrouces littéraires empruntés :</span>
+                    <span class="info-value">{{ livres_empruntes }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section tableau-de-bord">
+            <h2>Outils de gestion</h2>
+            <div class="boutons-dashboard">
+                <button class="dashboard-button" onclick="location.href='{{ url_for('sessions') }}';">
+                    <img src="{{ url_for('static', filename='images/utilisateurs.png') }}" alt="Gestion des Utilisateurs">
+                    <span>Gestion des Utilisateurs</span>
+                </button>
+                <button class="dashboard-button" onclick="location.href='{{ url_for('stocks') }}';">
+                    <img src="{{ url_for('static', filename='images/livres.png') }}" alt="Gestion des Ressources">
+                    <span>Gestion des Ressources Littéraires</span>
+                </button>
+            </div>
+        </div>
+
+
+            <!-- Boutons en bas de page -->
+            <div class="bottom-buttons">
+                <a href="#" class="haut" id="scrollTopButton">
+                    <img src="{{ url_for('static', filename='images/haut.png') }}" alt="Revenir en haut de la page">
+                </a>
+                <a href="#" class="haut contact" id="contactButton">CONTACT</a>
+            </div>
+        
+            <!-- Formulaire de contact -->
+            <div id="contactForm" class="popup-form">
+                <form id="contactFormElement">
+                    <h2>Contactez-nous</h2>
+                    <label for="name">Votre nom :</label>
+                    <input type="text" id="name" name="name" placeholder="Entrez votre nom complet">
+                    
+                    <label for="email">Votre email :</label>
+                    <input type="email" id="email" name="email" placeholder="Entrez votre email">
+                    
+                    <label for="subject">Sujet :</label>
+                    <input type="text" id="subject" name="subject" placeholder="Quel est l'objet de votre message ?">
+                    
+                    <label for="problem">Décrivez votre problème :</label>
+                    <textarea id="problem" name="problem" placeholder="Écrivez votre message ici..."></textarea>
+                    
+                    <div class="buttons-container">
+                        <button type="button" id="submitContactForm">Envoyer</button>
+                        <button type="button" id="closeContactForm">Fermer</button>
+                    </div>
+                </form>
+            </div>
+    
+            <!-- Notification -->
+            <div id="notification" class="notification"></div>
+    
+        <script src="{{ url_for('static', filename='js/styles.js') }}"></script>
+    </body>
+    </html>
+    
