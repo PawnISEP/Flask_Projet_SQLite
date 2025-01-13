@@ -776,7 +776,7 @@ def politique_confidentialite():
 
 @app.route('/mentions-légales')
 def mentions_legales():
-    return render_template('Mentions-légales.html')
+    return render_template('Mentions legales.html')
 
 @app.route('/rgpd')
 def rgpd():
@@ -784,7 +784,7 @@ def rgpd():
 
 @app.route('/à-propos')
 def a_propos():
-    return render_template('a-propos.html')
+    return render_template('A propos.html')
 
 
 #Rédamarrage de FLask
