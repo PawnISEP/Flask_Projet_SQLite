@@ -2,7 +2,6 @@
 from flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session, json
 from urllib.request import urlopen
 from werkzeug.utils import secure_filename
-from werkzeug.utils import safe_join
 from datetime import datetime
 import sqlite3
 
@@ -61,7 +60,7 @@ def catalogue():
 
     except sqlite3.Error as e:
         print(f"Erreur SQLite : {e}")
-        return render_template('erreur.html', message="Une erreur est survenue lors de l'accès à la base de données."), 500
+        return ("Une erreur est survenue lors de l'accès à la base de données."), 500
 
 
 
@@ -537,7 +536,7 @@ def administrateur():
 
     # Passer les données au template
     return render_template(
-        'administrateur.html',
+        'Administrateur.html',
         nombre_comptes=nombre_comptes,
         nombre_references=nombre_references,
         livres_en_stock=livres_en_stock,
@@ -777,7 +776,7 @@ def politique_confidentialite():
 
 @app.route('/mentions-légales')
 def mentions_legales():
-    return render_template('Mentions légales.html')
+    return render_template('Mentions-légales.html')
 
 @app.route('/rgpd')
 def rgpd():
@@ -785,7 +784,7 @@ def rgpd():
 
 @app.route('/à-propos')
 def a_propos():
-    return render_template('À propos.html')
+    return render_template('À-propos.html')
 
 
 #Rédamarrage de FLask
