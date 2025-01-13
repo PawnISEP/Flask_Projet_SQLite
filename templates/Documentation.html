@@ -74,7 +74,7 @@
 
             <h2>1.2. Administrateur</h2>
             <ul>
-                <li><strong>Accès :</strong> Le catalogue, ainsi que Tous les outils d'administration. </li>
+                <li><strong>Accès :</strong> Le catalogue, ainsi que tous les outils d'administration. </li>
                 <ul>
                         <li>Le compte administrateur ne permet pas d'emprunter et resituer des ressources, car ce compte est réservé à la gestion.
                 </ul>
@@ -109,11 +109,11 @@
             <h2>2.2. Routes Utilisateur</h2>
             <ul>
                 <li><strong>Emprunter (`/emprunter`) :</strong> Affichage des ressources disponibles à emprunter.</li>
-                <li><strong>Emprunter ressource (`/emprunter/post_id/id`) :</strong> Emprunt d'une ressource par un utilisateur.</li>
+                <li><strong>Emprunter ressource (`/emprunter/utilisateur_id/ressource_id`) :</strong> Emprunt d'une ressource par un utilisateur.</li>
                 <li><strong>Restituer (`/restituer`) :</strong> Consultation et gestion des emprunts en cours.</li>
-                <li><strong>Restituer (`/restituer/post_id/id`) :</strong> Restitution d'une ressource par un utilisateur.</li>
-                <li><strong>Utilisateur (`/utilisateur/<post_id>`) :</strong> Espace personnel de l'utilisateur pour gérer ses informations et emprunts.</li>
-                <li><strong>Suppression de compte (`/utilisateur/<post_id>supprimer`) :</strong> Suppression de son propre compte.</li>
+                <li><strong>Restituer (`/restituer/utilisateur_id/ressource_id`) :</strong> Restitution d'une ressource par un utilisateur.</li>
+                <li><strong>Utilisateur (`/utilisateur/<utilisateur_id>`) :</strong> Espace personnel de l'utilisateur pour gérer ses informations et emprunts.</li>
+                <li><strong>Suppression de compte (`/utilisateur/<utilisateur_id>supprimer`) :</strong> Suppression de son propre compte.</li>
             </ul>
 
             <h2>2.3. Routes Administrateur</h2>
@@ -121,7 +121,7 @@
                 <li><strong>Espace administratif (`/administrateur`) :</strong> Tableau de bord pour gérer les utilisateurs et ressources.</li>
                 <li><strong>Stocks (`/stocks`) :</strong> Gestion et visualisation des ressources en stock.</li>
                 <li><strong>Ajout de ressources (`/stocks/ajouter`) :</strong> Ajouter de nouvelles ressources à la bibliothèque.</li>
-                <li><strong>Suppression de ressources (`/stocks/supprimer/<id>`) :</strong> Supprimer des ressources ou exemplaires.</li>
+                <li><strong>Suppression de ressources (`/stocks/supprimer/<ressource_id>`) :</strong> Supprimer des ressources ou exemplaires.</li>
             </ul>
         </section>
 
