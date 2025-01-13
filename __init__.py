@@ -491,7 +491,7 @@ def utilisateur(post_id):
                 )
             else:
                 return render_template(
-                    'utilisateur.html', 
+                    'Utilisateur.html', 
                     utilisateur={
                         'id': utilisateur[0],
                         'nom': utilisateur[1],
