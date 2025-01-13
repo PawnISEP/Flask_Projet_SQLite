@@ -108,6 +108,6 @@
 ## Technologies utilisées
 
 - **Backend** : Python (Flask)
-- **Frontend** : HTML, CSS (Poppins)
+- **Frontend** : HTML, CSS (Poppins), JS
 - **Base de données** : SQLite
 - **Hébergement** : Local ou serveur web
