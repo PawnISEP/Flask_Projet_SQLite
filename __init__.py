@@ -774,15 +774,15 @@ def conditions_utilisation():
 def politique_confidentialite():
     return render_template('Politique de confidentialité.html')
 
-@app.route('/mentions-légales')
+@app.route('/mentions-legales')
 def mentions_legales():
-    return render_template('Mentions legales.html')
+    return render_template('Mentions légales.html')
 
 @app.route('/rgpd')
 def rgpd():
     return render_template('RGPD.html')
 
-@app.route('/à-propos')
+@app.route('/a-propos')
 def a_propos():
     return render_template('A propos.html')
 
