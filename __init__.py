@@ -1,6 +1,6 @@
 #Importation de Flask et de ses modules
 
-from flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session, json
+from flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session, json, safe_join
 from urllib.request import urlopen
 from werkzeug.utils import secure_filename
 from datetime import datetime
