@@ -784,7 +784,7 @@ def rgpd():
 
 @app.route('/à-propos')
 def a_propos():
-    return render_template('À-propos.html')
+    return render_template('a-propos.html')
 
 
 #Rédamarrage de FLask
