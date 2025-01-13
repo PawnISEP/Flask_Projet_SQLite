@@ -776,7 +776,7 @@ def politique_confidentialite():
 
 @app.route('/mentions-légales')
 def mentions_legales():
-    return render_template('Mentions-légales.html')
+    return render_template('Mentions légales.html')
 
 @app.route('/rgpd')
 def rgpd():
