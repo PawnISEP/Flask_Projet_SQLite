@@ -1,9 +1,20 @@
 name: Industrialisation continue sur le serveur Alwaysdata
-on: push
+on:
+  push:
+    branches:
+      - main  # Exécute uniquement sur les pushs vers la branche main
+
 jobs:
   Connexion:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
+      - name: Vérification des secrets
+        run: |
+          if [ -z "${{ secrets.USERNAME }}" ] || [ -z "${{ secrets.PASSWORD }}" ]; then
+            echo "Secrets USERNAME et PASSWORD sont requis."
+            exit 1
+          fi
+
       - name: Connexion SSH avec le serveur
         uses: appleboy/ssh-action@master
         with:
@@ -11,11 +22,20 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            echo "Connexion réussie. Navigation vers le dossier de travail."
             cd $HOME/www/
+  
   Copy:
     needs: Connexion
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
+      - name: Vérification des secrets
+        run: |
+          if [ -z "${{ secrets.GITHUB_TOKEN }}" ]; then
+            echo "Le secret GITHUB_TOKEN est requis pour cloner le dépôt."
+            exit 1
+          fi
+
       - name: Connexion SSH avec le serveur
         uses: appleboy/ssh-action@master
         with:
@@ -23,34 +43,52 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            echo "Clonage du dépôt GitHub."
             last_directory=$(basename ${{ runner.workspace }})
             cd $HOME/www/
-            git clone https://github.com/${{ github.repository }}.git
-            # Vérifier si le répertoire de destination existe
-            if [ "$(ls -A ./flask)" ]; then
+            git clone https://github.com/${{ github.repository }}.git || exit 1
+            echo "Vérification du répertoire de destination."
+            if [ -d "./flask" ]; then
+              echo "Synchronisation des fichiers..."
               rsync -r ./$last_directory/ ./flask
               rm -rf ./$last_directory
             else
-              echo "Le répertoire flask de destination sur votre serveur n'existe pas"
+              echo "Le répertoire flask de destination n'existe pas."
               exit 1
             fi
+
   Restart:
     needs: Copy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
+      - name: Vérification des secrets
+        run: |
+          if [ -z "${{ secrets.ALWAYSDATA_TOKEN }}" ] || [ -z "${{ secrets.ALWAYSDATA_SITE_ID }}" ]; then
+            echo "Les secrets ALWAYSDATA_TOKEN et ALWAYSDATA_SITE_ID sont requis."
+            exit 1
+          fi
+
       - name: Restart Alwaysdata site
         run: |
-          response_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST --basic --user "${{ secrets.ALWAYSDATA_TOKEN }}:" https://api.alwaysdata.com/v1/site/${{ secrets.ALWAYSDATA_SITE_ID }}/restart/)
-          # Vérifier le code de réponse HTTP
-          if [ "$response_code" -eq 204 ]; then
-            echo "Relance de votre site réussi"
-          elif [ "$response_code" -eq 404 ]; then
-            echo "Vous n'avez pas renseigner correctement votre secret ALWAYSDATA_SITE_ID"
-            exit 1  # Quitter avec un code d'erreur
-          elif [ "$response_code" -eq 401 ]; then
-            echo "Vous n'avez pas renseigner correctement votre secret ALWAYSDATA_TOKEN"
-          exit 1  # Quitter avec un code d'erreur
-          else
-            echo "Échec du redémarrage avec le code de réponse : $response_code"
-            exit 1  # Quitter avec un code d'erreur
-          fi
+          echo "Relance du site sur Alwaysdata..."
+          response_code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST --basic --user "${{ secrets.ALWAYSDATA_TOKEN }}:" \
+            https://api.alwaysdata.com/v1/site/${{ secrets.ALWAYSDATA_SITE_ID }}/restart/)
+
+          case "$response_code" in
+            204)
+              echo "Relance réussie."
+              ;;
+            404)
+              echo "Erreur : ALWAYSDATA_SITE_ID est incorrect."
+              exit 1
+              ;;
+            401)
+              echo "Erreur : ALWAYSDATA_TOKEN est incorrect."
+              exit 1
+              ;;
+            *)
+              echo "Échec du redémarrage, code de réponse : $response_code"
+              exit 1
+              ;;
+          esac
