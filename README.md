@@ -110,4 +110,4 @@
 - **Backend** : Python (Flask)
 - **Frontend** : HTML, CSS (Poppins), JS
 - **Base de données** : SQLite
-- **Hébergement** : Local ou serveur web
+- **Hébergement** : Serveur web (Flask)
